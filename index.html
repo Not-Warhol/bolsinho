@@ -9,6 +9,12 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#EAF4FC">
 <meta name="description" content="Os seus cartões de cliente, bilhetes e vales. Tudo no telemóvel, sem contas e sem nuvem.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Scaling Cards">
+<meta property="og:title" content="Scaling Cards">
+<meta property="og:description" content="Os seus cartões de cliente, bilhetes e vales. Tudo no telemóvel, sem contas e sem nuvem.">
+<meta property="og:image" content="https://not-warhol.github.io/scaling-cards/icon-512.png">
+<meta name="twitter:card" content="summary">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" href="icon-192.png">
@@ -201,11 +207,17 @@ h1{font-family:var(--display);font-weight:700;font-size:34px;letter-spacing:-.01
 .scanbox label,.scanbtn{font-size:13px;line-height:1.15}
 .scanbtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:var(--pink);color:var(--white);border:0;border-radius:20px;padding:14px 8px;font-family:var(--display);font-weight:600;box-shadow:0 4px 0 var(--pink-deep)}
 .scanbtn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--pink-deep)}
-.live{position:relative;border-radius:24px;overflow:hidden;background:#000;aspect-ratio:4/3;max-width:100%}
-.live video{width:100%;height:100%;object-fit:cover;display:block}
-.live .aim{position:absolute;inset:22% 12%;border:3px solid var(--white);border-radius:18px;box-shadow:0 0 0 999px rgba(0,0,0,.25);animation:breathe 1.6s ease-in-out infinite}
-@keyframes breathe{50%{transform:scale(.96)}}
-.live .chunk{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);padding:8px 18px;font-family:var(--display);font-weight:600}
+/* full-screen camera */
+.camfull{position:fixed;inset:0;z-index:60;background:#000;animation:fade .2s}
+.camfull video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.camfull .aim{position:absolute;left:50%;top:46%;width:min(80vw,380px);aspect-ratio:1.45;transform:translate(-50%,-50%);border:4px solid #fff;border-radius:28px;
+  box-shadow:0 0 0 100vmax rgba(10,8,30,.5);animation:breathe 1.6s ease-in-out infinite;transition:border-color .15s}
+.camfull.hit .aim{border-color:oklch(0.8 0.17 150);animation:none}
+@keyframes breathe{50%{transform:translate(-50%,-50%) scale(.96)}}
+.camfull .cam-top{position:absolute;left:50%;transform:translateX(-50%);top:calc(18px + env(safe-area-inset-top,0px));background:rgba(255,255,255,.92);color:var(--ink);
+  font-family:var(--display);font-weight:600;font-size:16px;padding:10px 18px;border-radius:99px;white-space:nowrap}
+.camfull .chunk{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(28px + env(safe-area-inset-bottom,0px));padding:14px 34px;font-family:var(--display);font-weight:600;font-size:17px}
+.camfull .chunk:active{transform:translate(-50%,3px)}
 .bulk{display:flex;flex-direction:column;gap:10px}
 .brow{display:flex;gap:12px;align-items:center;background:var(--white);border-radius:20px;padding:10px}
 .brow img{width:52px;height:72px;object-fit:cover;border-radius:10px;flex:none;background:var(--bg)}
@@ -253,8 +265,13 @@ input[type=range]{accent-color:var(--pink)}
 
 .pass .bar-r{display:flex;gap:8px}
 .share-qr .qr{padding:6px}
-.recv .tile{pointer-events:none;aspect-ratio:2.1}
-.recv .tile .name{font-size:24px}
+.recvpass{background-color:var(--bg);background-image:repeating-radial-gradient(circle at 100% 0%, transparent 0 46px, var(--ring) 47px 48px, transparent 49px 96px)}
+.recv-hi{display:flex;justify-content:center;padding-top:6px}
+.recv-hi .tag{background:var(--white);border-radius:99px;padding:9px 16px;font-family:var(--display);font-weight:600;font-size:16px;box-shadow:0 0 0 3px oklch(0.85 0.06 230 / .7)}
+.recvpass .head{padding:22px 20px}
+.recv-tip{background:var(--white);border-radius:20px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;font-size:14px;color:var(--muted);line-height:1.4}
+.recv-tip b{color:var(--ink)}
+.recvpass .link-btn{align-self:center}
 
 /* tutorial */
 .tut{position:fixed;inset:0;z-index:45;background-color:var(--bg);display:flex;flex-direction:column;overflow:hidden;
@@ -351,7 +368,33 @@ const safeC=c=>/^#[0-9a-f]{6}$/i.test(c||"")?c:"#4B9BE8";
 /* sharing: the card travels inside the link (after #, which browsers never send to the server) */
 function b64e(s){const b=new TextEncoder().encode(s);let bin="";b.forEach(x=>bin+=String.fromCharCode(x));return btoa(bin).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
 function b64d(s){s=s.replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";const bin=atob(s);return new TextDecoder().decode(Uint8Array.from(bin,c=>c.charCodeAt(0)))}
-function shareLink(it){const d={v:1,n:it.name,k:it.kind==="ticket"?1:0,f:it.format,x:it.code,c:it.color};if(it.note)d.o=it.note;if(it.expires)d.e=it.expires;return SHARE_BASE+"#c="+b64e(JSON.stringify(d))}
+function shareLink(it){const d={v:1,n:it.name,k:it.kind==="ticket"?1:0,f:it.format,x:it.code,c:it.color};if(it.note)d.o=it.note;if(it.expires)d.e=it.expires;return SHARE_BASE+"cartao.html#c="+b64e(JSON.stringify(d))}
+function mixHex(a,b,t){const A=a.match(/\w\w/g).map(h=>parseInt(h,16)),B=b.match(/\w\w/g).map(h=>parseInt(h,16));return "rgb("+A.map((v,i)=>Math.round(v*t+B[i]*(1-t))).join(",")+")"}
+function rr(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
+/* a picture of the card with its QR, so the message looks like a card and can be scanned or imported as a screenshot */
+async function makeShareImage(it,link){
+  try{await Promise.all([document.fonts.load("600 64px Fredoka"),document.fonts.load("800 30px Nunito")])}catch(e){}
+  const W=1080,H=1350,c=document.createElement("canvas");c.width=W;c.height=H;const g=c.getContext("2d");
+  const ink="#2A2240",col=safeC(it.color);
+  g.fillStyle="#EAF4FC";g.fillRect(0,0,W,H);
+  g.strokeStyle="rgba(170,150,230,.25)";g.lineWidth=3;for(let r=90;r<1500;r+=95){g.beginPath();g.arc(W,0,r,0,Math.PI*2);g.stroke()}
+  g.fillStyle=ink;g.textAlign="center";g.font="600 58px Fredoka, sans-serif";
+  g.fillText(it.kind==="ticket"?"Partilharam um bilhete consigo":"Partilharam um cartão consigo",W/2,120);
+  // card buddy
+  const cx=110,cy=180,cw=860,ch=330;
+  g.fillStyle=mixHex(col.slice(1),"3a3060",.62);rr(g,cx,cy+18,cw,ch,64);g.fill();
+  g.fillStyle=mixHex(col.slice(1),"ffffff",.42);rr(g,cx,cy,cw,ch,64);g.fill();
+  g.fillStyle=ink;for(const ex of [W/2-34,W/2+22]){rr(g,ex,cy+70,16,34,8);g.fill()}
+  g.fillStyle="rgba(240,140,160,.75)";for(const bx of [W/2-90,W/2+60]){g.beginPath();g.ellipse(bx+15,cy+108,22,12,0,0,Math.PI*2);g.fill()}
+  g.textAlign="left";g.fillStyle=ink;g.font="600 70px Fredoka, sans-serif";g.fillText(it.name.slice(0,22),cx+54,cy+ch-74);
+  g.font="800 32px Nunito, sans-serif";g.fillStyle="rgba(42,34,64,.7)";g.fillText((it.note||FMT_LABEL[it.format]).slice(0,44),cx+54,cy+ch-30);
+  // QR
+  const qx=270,qy=590,qs=540;g.fillStyle="#fff";rr(g,qx,qy,qs,qs,48);g.fill();
+  try{const q=document.createElement("canvas");bwipjs.toCanvas(q,{bcid:"qrcode",text:link,scale:8,eclevel:"L"});g.imageSmoothingEnabled=false;g.drawImage(q,qx+40,qy+40,qs-80,qs-80)}catch(e){}
+  g.textAlign="center";g.fillStyle="rgba(42,34,64,.75)";g.font="800 34px Nunito, sans-serif";
+  g.fillText("No Scaling Cards: Novo cartão → Câmara,",W/2,1210);g.fillText("e aponte aqui. Ou toque no link.",W/2,1258);
+  const blob=await new Promise(r=>c.toBlob(r,"image/png"));
+  return new File([blob],`${(it.name||"cartao").replace(/[^\wÀ-ÿ-]+/g,"-")}-scaling-cards.png`,{type:"image/png"})}
 function parseShared(text){const m=String(text||"").match(/#c=([A-Za-z0-9_-]+)/);if(!m)return null;
   try{const d=JSON.parse(b64d(m[1]));if(!d||!d.n||!d.x)return null;
     return {name:String(d.n).slice(0,60),kind:d.k?"ticket":"card",format:FMT_LABEL[d.f]?d.f:"CODE128",code:String(d.x).slice(0,500),
@@ -529,7 +572,6 @@ function openEditor(src){
       <label for="ePhoto">${ICON.photo}Fotos ou capturas</label><input id="ePhoto" type="file" accept="image/*" multiple>
       <label for="ePass">${ICON.wallet}Da Carteira</label><input id="ePass" type="file">
     </div>
-    <div class="live" id="eLive" hidden><video id="eVideo" playsinline muted autoplay></video><span class="aim"></span><button type="button" class="chunk" id="eLiveStop">Parar</button></div>
     <p class="hint" id="eScanMsg">${STANDALONE?"Aponte a câmara ao código.":"Neste link a câmara não lê em direto: tire uma foto ao código."} Pode escolher várias capturas de uma vez, ou um cartão partilhado da Carteira (.pkpass).</p>
     <div class="group"><div class="row"><label for="eLink">Recebeu um link?</label><input id="eLink" autocomplete="off" placeholder="Cole aqui o link partilhado"></div></div>`:""}
     <div class="group"><div class="row"><label for="eName">Loja</label><input id="eName" autocomplete="off" placeholder="ex.: Continente" value="${esc(it.name)}"></div></div>
@@ -574,12 +616,15 @@ function openEditor(src){
       msg.textContent=`Importado da Carteira: ${p.name||"cartão"} (${FMT_LABEL[p.format]}). Confirme e toque em Guardar.`;sfx.yay()}
     catch(err){msg.textContent=err.message||"Não consegui ler este ficheiro.";sfx.nope()}};
   let liveReader=null;
-  const stopLive=()=>{try{liveReader&&liveReader.reset()}catch(e){}liveReader=null;const l=$("#eLive");if(l)l.hidden=true};
+  const stopLive=()=>{try{liveReader&&liveReader.reset()}catch(e){}liveReader=null;document.getElementById("camFull")?.remove()};
   const startLive=async()=>{const msg=$("#eScanMsg");if(!window.ZXing){msg.textContent="O leitor não carregou. Escreva o número à mão.";return}
-    $("#eLive").hidden=false;msg.textContent="Aponte a câmara ao código…";
-    const hints=new Map();hints.set(ZXing.DecodeHintType.TRY_HARDER,true);liveReader=new ZXing.BrowserMultiFormatReader(hints,300);
-    try{await liveReader.decodeFromConstraints({video:{facingMode:"environment"}},$("#eVideo"),(res)=>{if(!res||!liveReader)return;
-      const fm=ZXing.BarcodeFormat[res.getBarcodeFormat()];stopLive();fill({code:res.getText(),format:ZX_MAP[fm]||"CODE128",raw:fm})})}
+    const ov=document.createElement("div");ov.className="camfull";ov.id="camFull";ov.setAttribute("role","dialog");ov.setAttribute("aria-label","Câmara");
+    ov.innerHTML=`<video id="eVideo" playsinline muted autoplay></video><div class="cam-top">Aponte ao código de barras ou QR</div><span class="aim"></span><button type="button" class="chunk" id="eLiveStop">Cancelar</button>`;
+    document.body.appendChild(ov);$("#eLiveStop").onclick=()=>{sfx.close();stopLive()};
+    const hints=new Map();hints.set(ZXing.DecodeHintType.TRY_HARDER,true);liveReader=new ZXing.BrowserMultiFormatReader(hints,250);
+    try{await liveReader.decodeFromConstraints({video:{facingMode:"environment",width:{ideal:1920},height:{ideal:1080}}},$("#eVideo"),(res)=>{if(!res||!liveReader)return;
+      const fm=ZXing.BarcodeFormat[res.getBarcodeFormat()];const r={code:res.getText(),format:ZX_MAP[fm]||"CODE128",raw:fm};
+      try{liveReader.reset()}catch(e){}liveReader=null;ov.classList.add("hit");setTimeout(()=>{stopLive();fill(r)},280)})}
     catch(err){stopLive();msg.textContent="Não tenho acesso à câmara. Permita-o em Definições > Safari > Câmara, ou use uma foto."}};
   if(isNew){$("#ePhoto").onchange=scan;$("#ePass").onchange=pass;
     $("#eLink").oninput=e=>{const v=e.target.value.trim();if(!v)return;const sh=parseShared(v);
@@ -609,8 +654,8 @@ function openShare(it){
     <div class="sheet-head"><span style="width:70px"></span><h2>Partilhar ${esc(it.name)}</h2><button class="chunk pink" id="shDone">OK</button></div>
     <div class="codebox share-qr"><div class="qr" id="shQr"></div>
       <p class="hint" style="margin:0;text-align:center">Ao pé de si? A outra pessoa abre o Scaling Cards, toca em <b>Novo cartão → Câmara</b> e aponta aqui.</p></div>
-    <div class="btns"><button class="chunk pink btn" id="shSend">Enviar link</button><button class="chunk btn" id="shCopy">Copiar link</button></div>
-    <p class="hint">Longe? Envie o link por WhatsApp, Mensagens ou e-mail. Quem tiver o link pode usar ${it.kind==="ticket"?"o bilhete":"o cartão"}, por isso partilhe só com quem confia.</p>
+    <div class="btns"><button class="chunk pink btn" id="shSend">Enviar ${it.kind==="ticket"?"bilhete":"cartão"}</button><button class="chunk btn" id="shCopy">Copiar link</button></div>
+    <p class="hint">Longe? Envie por WhatsApp, Mensagens ou e-mail: vai uma imagem do ${it.kind==="ticket"?"bilhete":"cartão"} com o QR e o link para o guardar. Quem o receber pode usá-lo, por isso partilhe só com quem confia.</p>
   </div>`;
   document.body.appendChild(shade);
   try{new QRCode($("#shQr"),{text:link,width:220,height:220,colorDark:"#000000",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.L})}catch(e){$("#shQr").textContent="Não consegui criar o QR. Use Enviar link."}
@@ -618,8 +663,15 @@ function openShare(it){
   $("#shDone").onclick=close;shade.onclick=e=>{if(e.target===shade)close()};
   const copy=()=>navigator.clipboard.writeText(link).then(()=>{sfx.yay();toast("Link copiado")}).catch(()=>toast("Não consegui copiar. Use Enviar link."));
   $("#shCopy").onclick=copy;
-  $("#shSend").onclick=async()=>{const text=`${it.kind==="ticket"?"Bilhete":"Cartão"} ${it.name} no Scaling Cards`;
-    if(navigator.share){try{await navigator.share({title:text,text:text+":",url:link});return}catch(e){if(e&&e.name==="AbortError")return}}copy()};
+  /* the picture is made as soon as the sheet opens: iOS only allows sharing straight from the tap */
+  let file=null;makeShareImage(it,link).then(f=>file=f).catch(()=>{});
+  $("#shSend").onclick=async()=>{
+    const text=`${it.kind==="ticket"?"Bilhete":"Cartão"} ${it.name}: toque para o guardar no Scaling Cards\n${link}`;
+    try{
+      if(file&&navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],text});return}
+      if(navigator.share){await navigator.share({title:`${it.name} no Scaling Cards`,text,url:link});return}
+    }catch(e){if(e&&e.name==="AbortError")return}
+    copy()};
 }
 function addShared(p){
   closeLayer();
@@ -627,14 +679,18 @@ function addShared(p){
   if(dup){toast("Já tem este cartão");openPass(dup.id);return}
   const it={id:uid(),...p,places:[]};state.items.unshift(it);state.tab=it.kind;state.onboarded=true;save();render();openPass(it.id);sfx.yay();confetti();toast(it.kind==="ticket"?"Bilhete recebido!":"Cartão recebido!")}
 function openReceive(p){
-  const link=SHARE_BASE+"#c="+location.hash.split("#c=")[1];
-  $("#layer").innerHTML=`<div class="shade" id="shade"><div class="sheet" role="dialog" aria-label="Cartão recebido">
-    <div class="grab"></div>
-    <h2 style="font-family:var(--display);font-weight:600;font-size:24px;margin:4px 0 0;text-align:center">Partilharam ${p.kind==="ticket"?"um bilhete":"um cartão"} consigo</h2>
-    <div class="grid cols-2 recv" style="--cols:1">${tileHTML({...p,id:"recv",places:[]},0)}</div>
-    <div class="btns"><button class="chunk pink btn" id="rSave">Guardar nos meus cartões</button><button class="link-btn" id="rNo">Agora não</button></div>
-    ${INSTALLED?"":`<p class="hint">Já tem o Scaling Cards no ecrã principal? Toque em <b>Copiar</b>, abra a app e cole em <b>Novo cartão</b>.</p><button class="chunk btn" id="rCopy">Copiar</button>`}
+  const link=SHARE_BASE+"cartao.html#c="+location.hash.split("#c=")[1];
+  const isT=p.kind==="ticket";
+  $("#layer").innerHTML=`<div class="pass recvpass" role="dialog" aria-label="Cartão recebido"><div class="pass-in">
+    <div class="recv-hi"><span class="tag">Partilharam ${isT?"um bilhete":"um cartão"} consigo</span></div>
+    <div class="head" style="--c:${safeC(p.color)}">${face("happy","recv")}<div><h2>${esc(p.name)}</h2><small>${isT?"Bilhete / vale":"Cartão de cliente"} · ${FMT_LABEL[p.format]}</small></div></div>
+    <div class="btns"><button class="chunk pink btn" id="rSave">Guardar nos meus ${isT?"bilhetes":"cartões"}</button></div>
+    ${INSTALLED?"":`<div class="recv-tip"><b>Tem o Scaling Cards no ecrã principal?</b><span>O iPhone abriu este link no Safari. Toque em Copiar, abra a app e cole em <b>Novo cartão → Recebeu um link?</b></span><button class="chunk btn" id="rCopy">Copiar</button></div>`}
+    <div class="codebox"><span class="bright">Já pode usar ${isT?"este bilhete":"este cartão"} aqui</span><div id="rCode"></div></div>
+    ${p.note?`<div class="meta"><div class="row"><span>Nota</span><span>${esc(p.note)}</span></div>${p.expires?`<div class="row"><span>Guardar até</span><span>${fmtDate(p.expires)}</span></div>`:""}</div>`:""}
+    <button class="link-btn" id="rNo">Agora não</button>
   </div></div>`;
+  drawCode($("#rCode"),p);
   history.replaceState(null,"",location.pathname+location.search);
   $("#rSave").onclick=()=>addShared(p);
   $("#rNo").onclick=()=>{sfx.close();closeLayer()};
