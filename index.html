@@ -251,6 +251,52 @@ input[type=range]{accent-color:var(--pink)}
 .chipwarn{align-self:center;background:var(--sun);font-weight:900;font-size:14px;padding:7px 14px;border-radius:99px}
 .chipwarn.old{background:oklch(0.92 0.01 280);color:var(--muted)}
 
+/* tutorial */
+.tut{position:fixed;inset:0;z-index:45;background-color:var(--bg);display:flex;flex-direction:column;overflow:hidden;
+  background-image:repeating-radial-gradient(circle at 50% 30%, transparent 0 46px, var(--ring) 47px 48px, transparent 49px 96px);
+  padding:calc(14px + env(safe-area-inset-top,0px)) 0 calc(22px + env(safe-area-inset-bottom,0px));animation:fade .3s}
+.tut.out{opacity:0;transition:opacity .25s}
+.tut-top{display:flex;justify-content:flex-end;padding:0 max(18px,env(safe-area-inset-right,0px)) 0 max(18px,env(safe-area-inset-left,0px));max-width:440px;width:100%;margin:0 auto}
+.tut-top .chunk{padding:8px 16px;font-family:var(--display);font-weight:600;font-size:14px}
+.tut-track{flex:1;display:flex;transition:transform .45s cubic-bezier(.3,1.2,.5,1);min-height:0}
+.slide{min-width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;
+  padding:0 max(28px,env(safe-area-inset-right,0px)) 0 max(28px,env(safe-area-inset-left,0px))}
+.slide h2{font-family:var(--display);font-weight:700;font-size:30px;line-height:1.05;margin:10px 0 0;text-wrap:balance;max-width:16ch}
+.slide p{margin:0;color:var(--muted);font-size:16px;line-height:1.45;max-width:32ch;font-weight:600}
+.slide p b{color:var(--ink);font-weight:900}
+.tut-foot{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%;max-width:440px;margin:0 auto;padding:0 max(18px,env(safe-area-inset-right,0px)) 0 max(18px,env(safe-area-inset-left,0px))}
+.dots{display:flex;gap:8px}
+.dots i{width:9px;height:9px;border-radius:99px;background:var(--lav-deep);opacity:.5;transition:all .3s;cursor:pointer}
+.dots i.on{width:26px;opacity:1;background:var(--pink)}
+.link-btn{border:0;background:none;color:var(--muted);font-weight:800;padding:4px 10px}
+.art{position:relative;width:230px;height:180px;max-width:100%}
+.bud{--edge:color-mix(in oklab,var(--c) 62%, oklch(0.3 0.06 280));position:absolute;width:120px;height:96px;border-radius:28px;
+  background:color-mix(in oklab,var(--c) 42%, #fff);box-shadow:0 6px 0 var(--edge);display:grid;place-items:center}
+.bud .face{margin:0;transform:scale(1.25)}
+.a1 .b1{left:55px;top:44px;width:130px;height:104px;animation:hop 2s ease-in-out infinite;z-index:2}
+.a1 .b2{left:0;top:22px;transform:rotate(-12deg) scale(.78)}
+.a1 .b3{right:0;top:14px;transform:rotate(10deg) scale(.72)}
+.a2 .scan{position:absolute;left:25px;top:20px;width:180px;height:130px;background:#fff;border-radius:22px;box-shadow:0 6px 0 var(--lav-deep);overflow:hidden}
+.bars{position:absolute;left:22px;right:22px;top:30px;bottom:30px;background:repeating-linear-gradient(90deg,var(--ink) 0 3px,transparent 3px 5px,var(--ink) 5px 6px,transparent 6px 10px,var(--ink) 10px 14px,transparent 14px 16px)}
+.laser{position:absolute;left:12px;right:12px;height:3px;border-radius:3px;background:var(--pink);box-shadow:0 0 12px var(--pink);top:20px;animation:laser 1.8s ease-in-out infinite}
+@keyframes laser{50%{top:105px}}
+.a2 .c{position:absolute;width:22px;height:22px;border:4px solid var(--pink);}
+.a2 .tl{left:8px;top:8px;border-right:0;border-bottom:0;border-radius:10px 0 0 0}.a2 .tr{right:8px;top:8px;border-left:0;border-bottom:0;border-radius:0 10px 0 0}
+.a2 .bl{left:8px;bottom:8px;border-right:0;border-top:0;border-radius:0 0 0 10px}.a2 .br{right:8px;bottom:8px;border-left:0;border-top:0;border-radius:0 0 10px 0}
+.a3 .phone{position:absolute;left:72px;top:6px;width:88px;height:168px;border-radius:22px;background:#fff;border:5px solid var(--ink);overflow:hidden;z-index:2}
+.a3 .phone .bars{left:12px;right:12px;top:60px;bottom:60px}
+.a3 .flash{position:absolute;inset:0;background:#fff;opacity:0;animation:flash 2.4s ease-out infinite}
+@keyframes flash{0%,60%{opacity:0}64%{opacity:1}100%{opacity:0}}
+.a3 .shot{position:absolute;top:30px;width:70px;height:120px;border-radius:14px;background:var(--white);box-shadow:0 4px 0 var(--lav-deep)}
+.a3 .s2{left:20px;transform:rotate(-12deg);background:var(--mint)}
+.a3 .s3{right:20px;transform:rotate(12deg);background:var(--sun)}
+.a4 .sun{position:absolute;left:50%;top:50%;width:200px;height:200px;margin:-100px 0 0 -100px;border-radius:50%;
+  background:repeating-conic-gradient(var(--sun) 0 10deg, transparent 10deg 30deg);-webkit-mask:radial-gradient(circle,#000 30%,transparent 70%);mask:radial-gradient(circle,#000 30%,transparent 70%);animation:spin 14s linear infinite}
+.a4 .b1{left:55px;top:42px;width:120px;height:96px}
+.empty .tutlink{border:0;background:none;color:var(--pink-deep);font-weight:900;padding:6px;text-decoration:underline;text-underline-offset:3px}
+.empty .arrow{font-size:28px;color:var(--pink);animation:nudge 1.2s ease-in-out infinite;margin-top:6px}
+@keyframes nudge{50%{transform:translateY(8px)}}
+
 .toast{position:fixed;bottom:calc(92px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--white);padding:11px 18px;border-radius:99px;font-size:14px;font-weight:800;z-index:50;animation:drop .4s cubic-bezier(.3,1.6,.5,1);max-width:calc(100% - 32px)}
 .confetti{position:fixed;z-index:60;pointer-events:none;width:9px;height:9px;border-radius:3px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
@@ -354,9 +400,12 @@ function seed(){return [
 ]}
 
 const KEY="scaling-cards-proto-v2";
-let state={items:[],cols:2,radius:100,tab:"card",q:"",here:null,notify:true,sound:false};
-function load(){try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s&&Array.isArray(s.items)){state={...state,...s,here:null,q:""};return}}catch(e){}state.items=seed()}
-function save(){try{localStorage.setItem(KEY,JSON.stringify({items:state.items,cols:state.cols,radius:state.radius,tab:state.tab,notify:state.notify,sound:state.sound}))}catch(e){}}
+let state={items:[],cols:2,radius:100,tab:"card",q:"",here:null,notify:true,sound:false,onboarded:false};
+/* codes of the old example cards, removed for anyone who had them before the tutorial existed */
+const SEED_CODES=new Set(seed().map(i=>i.code));
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s&&Array.isArray(s.items)){state={...state,...s,here:null,q:""};
+  if(!s.onboarded)state.items=state.items.filter(i=>!SEED_CODES.has(i.code));return}}catch(e){}state.items=[]}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({items:state.items,cols:state.cols,radius:state.radius,tab:state.tab,notify:state.notify,sound:state.sound,onboarded:state.onboarded}))}catch(e){}}
 
 /* tiny sounds (WebAudio, only after a tap) */
 let ac=null;
@@ -402,7 +451,8 @@ function render(){
   items=[...items].sort((a,b)=>isHere(b)-isHere(a));
   let n=0;const g=list=>`<div class="grid cols-${state.cols}" style="--cols:${state.cols}">${list.map(it=>tileHTML(it,n++)).join("")}</div>`;
   let html="";
-  if(isCard){html=items.length?g(items):empty("Ainda está vazio","Toque em Novo cartão e aponte a câmara ao código de barras.")}
+  if(isCard){html=items.length?g(items):empty("Ainda não tem cartões","Toque em <b>Novo cartão</b>, aqui em baixo, para adicionar o primeiro.",
+    `<button class="tutlink" id="emptyTut">Ver como se faz</button><span class="arrow" aria-hidden="true">↓</span>`)}
   else{
     const act=items.filter(i=>{const d=daysLeft(i.expires);return d===null||d>=0}).sort((a,b)=>isHere(b)-isHere(a)||(a.expires||"9").localeCompare(b.expires||"9"));
     const old=items.filter(i=>{const d=daysLeft(i.expires);return d!==null&&d<0});
@@ -412,7 +462,7 @@ function render(){
   if(state.q&&!items.length)html=empty("Nada encontrado",`Nenhum resultado para “${esc(state.q)}”.`);
   $("#list").innerHTML=html;
 }
-function empty(t,s){return `<div class="empty"><div class="big">${face("","empty")}</div><b>${t}</b><span>${s}</span></div>`}
+function empty(t,s,extra=""){return `<div class="empty"><div class="big">${face("","empty")}</div><b>${t}</b><span>${s}</span>${extra}</div>`}
 
 /* ---------- pass view ---------- */
 let wake=null;
@@ -529,6 +579,40 @@ function openEditor(src){
     state.items=state.items.filter(x=>x.id!==it.id);save();closeLayer();render();toast("Apagado")}}
 }
 
+/* ---------- first-run tutorial ---------- */
+const TUT=[
+  {art:`<div class="art a1"><span class="bud b2" style="--c:#4CC38A">${face("","t2")}</span><span class="bud b3" style="--c:#F5B83D">${face("","t3")}</span><span class="bud b1" style="--c:#E86FB8">${face("happy","t1")}</span></div>`,
+   h:"Olá! Eu guardo os seus cartões",p:"Cartões de cliente, bilhetes e vales, todos num só sítio. Ficam só no seu telemóvel: sem contas, sem nuvem."},
+  {art:`<div class="art a2"><div class="scan"><span class="bars"></span><span class="laser"></span><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i></div></div>`,
+   h:"Aponte a câmara ao código",p:"Toque em <b>Novo cartão</b> e aponte a câmara ao código de barras do cartão. Se não tiver código, escreva o número."},
+  {art:`<div class="art a3"><span class="shot s3"></span><span class="shot s2"></span><div class="phone"><span class="bars"></span><span class="flash"></span></div></div>`,
+   h:"O cartão está noutra app?",p:"Faça uma captura de ecrã ao cartão na app da loja e escolha <b>Fotos ou capturas</b>. Pode escolher várias de uma vez. Da Carteira do iPhone, use <b>Da Carteira</b>."},
+  {art:`<div class="art a4"><span class="sun"></span><span class="bud b1" style="--c:#4B9BE8">${face("happy","t4")}</span></div>`,
+   h:"Na caixa, é só tocar",p:"Toque no cartão e o ecrã fica mais brilhante, para qualquer leitor o conseguir ler. Os bilhetes avisam quando estão quase a acabar."}
+];
+function openTutorial(){
+  let i=0;
+  const el=document.createElement("div");el.className="tut";el.setAttribute("role","dialog");el.setAttribute("aria-label","Tutorial");
+  el.innerHTML=`<div class="tut-top"><button class="chunk" id="tSkip">Saltar</button></div>
+    <div class="tut-track" id="tTrack">${TUT.map((s,k)=>`<section class="slide" aria-hidden="${k!==0}">${s.art}<h2>${s.h}</h2><p>${s.p}</p></section>`).join("")}</div>
+    <div class="tut-foot"><div class="dots" id="tDots">${TUT.map((_,k)=>`<i data-k="${k}"></i>`).join("")}</div>
+      <button class="chunk pink btn" id="tNext">Seguinte</button><button class="link-btn" id="tLater" hidden>Mais tarde</button></div>`;
+  document.body.appendChild(el);
+  const go=k=>{i=Math.max(0,Math.min(TUT.length-1,k));$("#tTrack").style.transform=`translateX(${-i*100}%)`;
+    el.querySelectorAll(".slide").forEach((s,k2)=>s.setAttribute("aria-hidden",k2!==i));
+    el.querySelectorAll(".dots i").forEach((d,k2)=>d.classList.toggle("on",k2===i));
+    const last=i===TUT.length-1;$("#tNext").textContent=last?"Adicionar o primeiro cartão":"Seguinte";$("#tLater").hidden=!last;$("#tSkip").style.visibility=last?"hidden":"visible"};
+  const done=add=>{state.onboarded=true;save();el.classList.add("out");setTimeout(()=>el.remove(),250);render();if(add){state.tab="card";render();sfx.open();openEditor(null)}};
+  $("#tNext").onclick=()=>{sfx.tap();i===TUT.length-1?done(true):go(i+1)};
+  $("#tLater").onclick=()=>{sfx.close();done(false)};
+  $("#tSkip").onclick=()=>{sfx.close();done(false)};
+  el.querySelectorAll(".dots i").forEach(d=>d.onclick=()=>go(+d.dataset.k));
+  let x0=null;const tr=$("#tTrack");
+  tr.addEventListener("touchstart",e=>{x0=e.touches[0].clientX},{passive:true});
+  tr.addEventListener("touchend",e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>40){sfx.tap();go(i+(dx<0?1:-1))}});
+  go(0);
+}
+
 /* ---------- import many screenshots at once ---------- */
 async function openBulk(files){
   sfx.open();
@@ -590,7 +674,7 @@ function openSettings(){
     <div class="section-label" style="margin:0 4px">Cópia de segurança</div>
     <div class="btns"><button class="chunk btn" id="sExp">Exportar cartões</button><button class="chunk btn" id="sImp">Importar cartões</button></div>
     <div id="sBox"></div>
-    <div class="btns"><button class="chunk btn danger" id="sReset">Repor exemplos</button></div>
+    <div class="btns"><button class="chunk btn" id="sTut">Ver o tutorial outra vez</button></div>
     <p class="hint" style="text-align:center">Sem contas · sem nuvem · sem anúncios</p>
   </div></div>`;
   $("#shade").onclick=e=>{if(e.target.id==="shade")closeLayer()};
@@ -610,8 +694,7 @@ function openSettings(){
     $("#sDoImp").onclick=()=>{try{const d=JSON.parse($("#sIn").value);const arr=Array.isArray(d)?d:d.items;if(!Array.isArray(arr))throw 0;
       const ids=new Set(state.items.map(i=>i.id));let n=0;arr.forEach(x=>{if(x&&x.name&&x.code&&!ids.has(x.id)){state.items.push({places:[],note:"",expires:null,format:"CODE128",color:COLORS[0],kind:"card",...x,id:x.id||uid()});n++}});
       save();render();closeLayer();sfx.yay();toast(n?`${n} importados`:"Nada de novo para importar")}catch(e){sfx.nope();toast("Este texto não é uma cópia de segurança válida")}}};
-  const r=$("#sReset");let armed=false;r.onclick=()=>{if(!armed){armed=true;sfx.nope();r.classList.add("armed");r.textContent="Toque outra vez: apaga os seus e repõe os exemplos";setTimeout(()=>{armed=false;r.classList.remove("armed");r.textContent="Repor exemplos"},3000);return}
-    state.items=seed();state.here=null;save();closeLayer();render();toast("Exemplos repostos")};
+  $("#sTut").onclick=()=>{sfx.tap();closeLayer();openTutorial()};
 }
 
 function arrive(){
@@ -633,9 +716,10 @@ $("#btnAdd").onclick=()=>{sfx.open();openEditor(null)};
 $("#btnSettings").onclick=openSettings;
 $("#btnSound").onclick=()=>{state.sound=!state.sound;save();soundIcon();sfx.yay();toast(state.sound?"Sons ligados":"Sons desligados")};
 $("#search").oninput=e=>{state.q=e.target.value;render()};
-$("#list").onclick=e=>{const t=e.target.closest(".tile");if(t)openPass(t.dataset.id)};
+$("#list").onclick=e=>{if(e.target.closest("#emptyTut")){sfx.tap();openTutorial();return}const t=e.target.closest(".tile");if(t)openPass(t.dataset.id)};
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeLayer()});
 render();
+if(!state.onboarded)openTutorial();
 </script>
 
 <script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script>
