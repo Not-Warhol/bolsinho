@@ -1,0 +1,7 @@
+dev/tests/node_modules/
+dev/tests/results/
+dev/tests/shots/
+dev/tests/shots-antes/
+dev/tests/fixtures/
+dev/tests/test-results/
+antes-v7/

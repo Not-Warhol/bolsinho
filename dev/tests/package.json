@@ -1,0 +1,19 @@
+{
+  "name": "scaling-cards-tests",
+  "version": "1.0.0",
+  "description": "Testes automáticos do Scaling Cards (Playwright + WebKit)",
+  "scripts": {
+    "test": "playwright test",
+    "antes": "SC_APP=antes-v7/pwa/index.html SC_SHOTS=shots-antes playwright test specs/layout.spec.js -g ecrãs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.56.1",
+    "bwip-js": "^4.5.1",
+    "jszip": "^3.10.1"
+  }
+}
