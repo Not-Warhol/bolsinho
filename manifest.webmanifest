@@ -1,0 +1,26 @@
+{
+  "name": "Scaling Cards",
+  "short_name": "Cards",
+  "description": "Cartões de cliente, bilhetes e vales. Sem contas, sem nuvem.",
+  "lang": "pt-PT",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#EAF4FC",
+  "theme_color": "#EAF4FC",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
