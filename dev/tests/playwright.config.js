@@ -1,4 +1,4 @@
-// Scaling Cards — testes automáticos com o motor do Safari (WebKit).
+// Bolsinho — testes automáticos com o motor do Safari (WebKit).
 // Correr:  cd tests && npx playwright test
 const { defineConfig, devices } = require('@playwright/test');
 const fs = require('fs'); const path = require('path');

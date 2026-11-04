@@ -8,7 +8,7 @@ const KEY = 'scaling-cards-proto-v2';
 // Funciona em dois sítios: na pasta de trabalho (site em pwa/) e dentro do repositório (testes em dev/tests, site na raiz).
 const IN_REPO = !fs.existsSync(path.join(__dirname, '..', '..', 'pwa', 'index.html'));
 const SITE = IN_REPO ? '' : 'pwa/';
-const PROTO = IN_REPO ? 'dev/scaling-cards.html' : 'scaling-cards.html';
+const PROTO = IN_REPO ? 'dev/bolsinho.html' : 'bolsinho.html';
 const APP = process.env.SC_APP || SITE + 'index.html'; // SC_APP=antes-v7/pwa/index.html testa a versão antiga
 const SHOTS = path.join(__dirname, '..', process.env.SC_SHOTS || 'shots');
 const FIX = path.join(__dirname, '..', 'fixtures');

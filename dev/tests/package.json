@@ -1,7 +1,7 @@
 {
-  "name": "scaling-cards-tests",
+  "name": "bolsinho-tests",
   "version": "1.0.0",
-  "description": "Testes automáticos do Scaling Cards (Playwright + WebKit)",
+  "description": "Testes automáticos do Bolsinho (Playwright + WebKit)",
   "scripts": {
     "test": "playwright test",
     "antes": "SC_APP=antes-v7/pwa/index.html SC_SHOTS=shots-antes playwright test specs/layout.spec.js -g ecrãs"

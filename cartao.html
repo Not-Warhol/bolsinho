@@ -5,25 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Scaling Cards">
+<meta name="apple-mobile-web-app-title" content="Bolsinho">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#EAF4FC">
-<meta name="description" content="Toque para ver o cartão e guardá-lo no Scaling Cards.">
+<meta name="description" content="Toque para ver o cartão e guardá-lo no Bolsinho.">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Scaling Cards">
+<meta property="og:site_name" content="Bolsinho">
 <meta property="og:title" content="Partilharam um cartão consigo">
-<meta property="og:description" content="Toque para ver o cartão e guardá-lo no Scaling Cards.">
-<meta property="og:image" content="https://not-warhol.github.io/scaling-cards/icon-512.png">
+<meta property="og:description" content="Toque para ver o cartão e guardá-lo no Bolsinho.">
+<meta property="og:image" content="https://not-warhol.github.io/bolsinho/icon-512.png">
 <meta name="twitter:card" content="summary">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" href="icon-192.png">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
-<script>window.SC_STANDALONE=true;window.SC_VERSION="v8"</script>
+<script>window.SC_STANDALONE=true;window.SC_VERSION="v9"</script>
 </head>
 <body>
 <meta charset="utf-8">
-<title>Scaling Cards</title>
+<title>Bolsinho</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&family=JetBrains+Mono:wght@600&display=swap">
@@ -331,7 +331,7 @@ input[type=range]{accent-color:var(--pink)}
 
 <main class="app" id="app">
   <header class="top">
-    <div class="logo"><span class="blob"></span><b>Scaling Cards</b><span>PT</span></div>
+    <div class="logo"><span class="blob"></span><b>Bolsinho</b><span>PT</span></div>
     <div class="icons">
       <button class="chunk icon-btn" id="btnSound" aria-label="Som" aria-pressed="false"></button>
       <button class="chunk icon-btn" id="btnSettings" aria-label="Definições"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2.2"/><circle cx="10" cy="17" r="2.2"/></svg></button>
@@ -367,7 +367,7 @@ function fmtDate(s){if(!s)return"";return new Date(s+"T12:00:00").toLocaleDateSt
 const FMT_LABEL={EAN13:"EAN-13",EAN8:"EAN-8",UPC:"UPC-A",CODE128:"Code 128",QR:"Código QR",PDF417:"PDF417",AZTEC:"Aztec",NUMBER:"Só número"};
 const STANDALONE=!!window.SC_STANDALONE;
 const INSTALLED=navigator.standalone===true||matchMedia("(display-mode: standalone)").matches;
-const SHARE_BASE="https://not-warhol.github.io/scaling-cards/";
+const SHARE_BASE="https://not-warhol.github.io/bolsinho/";
 const safeC=c=>/^#[0-9a-f]{6}$/i.test(c||"")?c:"#4B9BE8";
 /* sharing: the card travels inside the link (after #, which browsers never send to the server) */
 function b64e(s){const b=new TextEncoder().encode(s);let bin="";b.forEach(x=>bin+=String.fromCharCode(x));return btoa(bin).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
@@ -396,9 +396,9 @@ async function makeShareImage(it,link){
   const qx=270,qy=590,qs=540;g.fillStyle="#fff";rr(g,qx,qy,qs,qs,48);g.fill();
   try{const q=document.createElement("canvas");bwipjs.toCanvas(q,{bcid:"qrcode",text:link,scale:8,eclevel:"L"});g.imageSmoothingEnabled=false;g.drawImage(q,qx+40,qy+40,qs-80,qs-80)}catch(e){}
   g.textAlign="center";g.fillStyle="rgba(42,34,64,.75)";g.font="800 34px Nunito, sans-serif";
-  g.fillText("No Scaling Cards: Novo cartão → Câmara,",W/2,1210);g.fillText("e aponte aqui. Ou toque no link.",W/2,1258);
+  g.fillText("No Bolsinho: Novo cartão → Câmara,",W/2,1210);g.fillText("e aponte aqui. Ou toque no link.",W/2,1258);
   const blob=await new Promise(r=>c.toBlob(r,"image/png"));
-  return new File([blob],`${(it.name||"cartao").replace(/[^\wÀ-ÿ-]+/g,"-")}-scaling-cards.png`,{type:"image/png"})}
+  return new File([blob],`${(it.name||"cartao").replace(/[^\wÀ-ÿ-]+/g,"-")}-bolsinho.png`,{type:"image/png"})}
 function parseShared(text){const m=String(text||"").match(/#c=([A-Za-z0-9_-]+)/);if(!m)return null;
   try{const d=JSON.parse(b64d(m[1]));if(!d||!d.n||!d.x)return null;
     return {name:String(d.n).slice(0,60),kind:d.k?"ticket":"card",format:FMT_LABEL[d.f]?d.f:"CODE128",code:String(d.x).slice(0,500),
@@ -462,7 +462,7 @@ function seed(){return [
   {id:uid(),kind:"ticket",name:"Coliseu",color:"#E86FB8",format:"QR",code:"COL-PLATEIA-B-18",note:"Plateia B, lugar 18",places:[],expires:plusDays(-2)}
 ]}
 
-const KEY="scaling-cards-proto-v2";
+const KEY="scaling-cards-proto-v2"; /* nome antigo de propósito: mudar a chave apagava os cartões já guardados */
 let state={items:[],cols:2,radius:100,tab:"card",q:"",here:null,hereId:null,notify:false,sound:false,onboarded:false};
 /* codes of the old example cards, removed for anyone who had them before the tutorial existed */
 const SEED_CODES=new Set(seed().map(i=>i.code));
@@ -643,7 +643,7 @@ function openEditor(src){
     tick()};
   if(isNew){$("#ePhoto").onchange=scan;$("#ePass").onchange=pass;
     $("#eLink").oninput=e=>{const v=e.target.value.trim();if(!v)return;const sh=parseShared(v);
-      if(sh)addShared(sh);else{$("#eScanMsg").textContent="Este link não é de um cartão partilhado do Scaling Cards.";sfx.nope()}};
+      if(sh)addShared(sh);else{$("#eScanMsg").textContent="Este link não é de um cartão partilhado do Bolsinho.";sfx.nope()}};
     if(STANDALONE){$("#eLiveBtn").onclick=startLive}else{$("#eCam").onchange=scan}}
   const geoHint=()=>{const n=(it.geo||[]).length;$("#eGeoHint").textContent=n?`${n===1?"1 local guardado":n+" locais guardados"}. Com a app aberta perto daqui, este cartão passa para a frente. `:"Abra o cartão uma vez na loja e toque aqui. Depois, sempre que abrir a app nessa loja, o cartão aparece primeiro.";
     if(n){const b=document.createElement("button");b.className="linkish";b.type="button";b.textContent="Apagar locais";b.onclick=()=>{it.geo=[];geoHint()};$("#eGeoHint").appendChild(b)}};
@@ -674,7 +674,7 @@ function openShare(it){
     <div class="grab"></div>
     <div class="sheet-head"><span style="width:70px"></span><h2>Partilhar ${esc(it.name)}</h2><button class="chunk pink" id="shDone">OK</button></div>
     <div class="codebox share-qr"><div class="qr" id="shQr"></div>
-      <p class="hint" style="margin:0;text-align:center">Ao pé de si? A outra pessoa abre o Scaling Cards, toca em <b>Novo cartão → Câmara</b> e aponta aqui.</p></div>
+      <p class="hint" style="margin:0;text-align:center">Ao pé de si? A outra pessoa abre o Bolsinho, toca em <b>Novo cartão → Câmara</b> e aponta aqui.</p></div>
     <div class="btns"><button class="chunk pink btn" id="shSend">Enviar ${it.kind==="ticket"?"bilhete":"cartão"}</button><button class="chunk btn" id="shCopy">Copiar link</button></div>
     <p class="hint">Longe? Envie por WhatsApp, Mensagens ou e-mail: vai uma imagem do ${it.kind==="ticket"?"bilhete":"cartão"} com o QR e o link para o guardar. Quem o receber pode usá-lo, por isso partilhe só com quem confia.</p>
   </div>`;
@@ -687,10 +687,10 @@ function openShare(it){
   /* the picture is made as soon as the sheet opens: iOS only allows sharing straight from the tap */
   let file=null;makeShareImage(it,link).then(f=>file=f).catch(()=>{});
   $("#shSend").onclick=async()=>{
-    const text=`${it.kind==="ticket"?"Bilhete":"Cartão"} ${it.name}: toque para o guardar no Scaling Cards\n${link}`;
+    const text=`${it.kind==="ticket"?"Bilhete":"Cartão"} ${it.name}: toque para o guardar no Bolsinho\n${link}`;
     try{
       if(file&&navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],text});return}
-      if(navigator.share){await navigator.share({title:`${it.name} no Scaling Cards`,text,url:link});return}
+      if(navigator.share){await navigator.share({title:`${it.name} no Bolsinho`,text,url:link});return}
     }catch(e){if(e&&e.name==="AbortError")return}
     copy()};
 }
@@ -706,7 +706,7 @@ function openReceive(p){
     <div class="recv-hi"><span class="tag">Partilharam ${isT?"um bilhete":"um cartão"} consigo</span></div>
     <div class="head" style="--c:${safeC(p.color)}">${face("happy","recv")}<div><h2>${esc(p.name)}</h2><small>${isT?"Bilhete / vale":"Cartão de cliente"} · ${FMT_LABEL[p.format]}</small></div></div>
     <div class="btns"><button class="chunk pink btn" id="rSave">Guardar nos meus ${isT?"bilhetes":"cartões"}</button></div>
-    ${INSTALLED?"":`<div class="recv-tip"><b>Tem o Scaling Cards no ecrã principal?</b><span>O iPhone abriu este link no Safari. Toque em Copiar, abra a app e cole em <b>Novo cartão → Recebeu um link?</b></span><button class="chunk btn" id="rCopy">Copiar</button></div>`}
+    ${INSTALLED?"":`<div class="recv-tip"><b>Tem o Bolsinho no ecrã principal?</b><span>O iPhone abriu este link no Safari. Toque em Copiar, abra a app e cole em <b>Novo cartão → Recebeu um link?</b></span><button class="chunk btn" id="rCopy">Copiar</button></div>`}
     <div class="codebox"><span class="bright">Já pode usar ${isT?"este bilhete":"este cartão"} aqui</span><div id="rCode"></div></div>
     ${p.note?`<div class="meta"><div class="row"><span>Nota</span><span>${esc(p.note)}</span></div>${p.expires?`<div class="row"><span>Guardar até</span><span>${fmtDate(p.expires)}</span></div>`:""}</div>`:""}
     <button class="link-btn" id="rNo">Agora não</button>
@@ -826,7 +826,7 @@ function openSettings(){
   $("#sSnd").onchange=e=>{state.sound=e.target.checked;save();soundIcon();sfx.yay()};
   $("#sSim").onchange=e=>{const it=state.items.find(i=>i.id===e.target.value);state.hereId=it?it.id:null;state.here=it?((it.geo||[])[0]?.n||it.name):null;closeLayer();arrive()};
   $("#sNot").addEventListener("change",e=>{if(e.target.checked){lastGeo=0;checkPlace()}});
-  $("#sExp").onclick=()=>{sfx.tap();const json=JSON.stringify({app:"Scaling Cards",version:1,exported:new Date().toISOString(),items:state.items},null,2);
+  $("#sExp").onclick=()=>{sfx.tap();const json=JSON.stringify({app:"Bolsinho",version:1,exported:new Date().toISOString(),items:state.items},null,2);
     $("#sBox").innerHTML=`<div class="group"><div class="row"><textarea id="sJson" rows="6" readonly style="font-family:var(--mono);font-size:12px">${esc(json)}</textarea></div></div><button class="chunk pink btn" id="sCopy" style="margin-top:12px">Copiar</button><p class="hint" style="margin-top:12px">Na app real é guardado como ficheiro .json (Ficheiros, AirDrop, e-mail).</p>`;
     $("#sCopy").onclick=()=>{navigator.clipboard.writeText(json).then(()=>{sfx.yay();toast("Copiado")}).catch(()=>{$("#sJson").select();toast("Selecionado: copie com Copiar")})}};
   $("#sImp").onclick=()=>{sfx.tap();$("#sBox").innerHTML=`<div class="group"><div class="row"><textarea id="sIn" rows="5" placeholder="Cole aqui o conteúdo exportado" style="font-family:var(--mono);font-size:12px"></textarea></div></div>

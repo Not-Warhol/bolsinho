@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""Builds the home-screen (PWA) version of Scaling Cards into ./pwa from scaling-cards.html.
-Run again after every change to scaling-cards.html:  python3 build_pwa.py
+"""Builds the home-screen (PWA) version of Bolsinho into ./pwa from bolsinho.html.
+Run again after every change to bolsinho.html:  python3 build_pwa.py
 """
 import json, os, struct, zlib
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 # no repositório este ficheiro está em dev/ e o site é a raiz; na pasta de trabalho o site vai para pwa/
 OUT = os.path.dirname(HERE) if os.path.basename(HERE) == "dev" else os.path.join(HERE, "pwa")
-VERSION = "v8"
+VERSION = "v9"
 BG = "#EAF4FC"
 
-SITE = "https://not-warhol.github.io/scaling-cards/"
+SITE = "https://not-warhol.github.io/bolsinho/"
 
 HEAD = """<!doctype html>
 <html lang="pt-PT">
@@ -19,12 +19,12 @@ HEAD = """<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Scaling Cards">
+<meta name="apple-mobile-web-app-title" content="Bolsinho">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="{bg}">
 <meta name="description" content="{desc}">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Scaling Cards">
+<meta property="og:site_name" content="Bolsinho">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:image" content="{site}icon-512.png">
@@ -46,7 +46,7 @@ addEventListener("load",()=>navigator.serviceWorker.register("sw.js",{updateViaC
 </html>
 """
 
-SW = """const CACHE="scaling-cards-%s";
+SW = """const CACHE="bolsinho-%s";
 const SHELL=["./","index.html","cartao.html","manifest.webmanifest","icon-180.png","icon-192.png","icon-512.png"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
@@ -62,8 +62,8 @@ self.addEventListener("fetch",e=>{
 """ % VERSION
 
 MANIFEST = {
-    "name": "Scaling Cards",
-    "short_name": "Cards",
+    "name": "Bolsinho",
+    "short_name": "Bolsinho",
     "description": "Cartões de cliente, bilhetes e vales. Sem contas, sem nuvem.",
     "lang": "pt-PT",
     "start_url": "./",
@@ -136,11 +136,11 @@ def png(size, path, ss=4):
 
 def main():
     os.makedirs(OUT, exist_ok=True)
-    src = open(os.path.join(HERE, "scaling-cards.html"), encoding="utf-8").read()
+    src = open(os.path.join(HERE, "bolsinho.html"), encoding="utf-8").read()
     pages = {
-        "index.html": ("Scaling Cards", "Os seus cartões de cliente, bilhetes e vales. Tudo no telemóvel, sem contas e sem nuvem."),
+        "index.html": ("Bolsinho", "Os seus cartões de cliente, bilhetes e vales. Tudo no telemóvel, sem contas e sem nuvem."),
         # shared-card links point here, so message previews say a card was shared instead of showing the app
-        "cartao.html": ("Partilharam um cartão consigo", "Toque para ver o cartão e guardá-lo no Scaling Cards."),
+        "cartao.html": ("Partilharam um cartão consigo", "Toque para ver o cartão e guardá-lo no Bolsinho."),
     }
     for name, (title, desc) in pages.items():
         head = HEAD.replace("{{", "{").replace("}}", "}").replace("{title}", title).replace("{desc}", desc).replace("{site}", SITE).replace("{bg}", BG).replace("{version}", VERSION)
